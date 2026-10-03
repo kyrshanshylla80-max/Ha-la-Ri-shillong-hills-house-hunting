@@ -1,0 +1,6 @@
+{
+  "name": "Ha la Ri • Shillong Hill House Hunting",
+  "description": "Find your place in the hills of Shillong. Explore verified rental cottages, duplex apartments, and hill properties across Laitumkhrah, Polo, and Meghalaya.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

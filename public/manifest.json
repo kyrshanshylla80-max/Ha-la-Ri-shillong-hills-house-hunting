@@ -1,0 +1,21 @@
+{
+  "name": "ha la Ri - Shillong House Rent & Sale",
+  "short_name": "ha la Ri",
+  "description": "Find rent houses and houses for sale in Shillong Meghalaya with live map search",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#7A9E7E",
+  "theme_color": "#7A9E7E",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

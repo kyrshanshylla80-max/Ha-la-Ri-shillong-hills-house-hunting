@@ -1,0 +1,98 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Diagnostic connection test endpoint
+    match /test/connection {
+      allow get: if true;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) 
+                    && incoming().uid == request.auth.uid
+                    && incoming().email is string
+                    && incoming().role in ['tenant', 'owner', 'rent_owner'];
+      allow update: if isOwner(userId) 
+                    && incoming().uid == existing().uid
+                    && (!('role' in incoming()) || incoming().role in ['tenant', 'owner', 'rent_owner']);
+      allow delete: if false;
+
+      // User Saved Properties Subcollection
+      match /saved/{propertyId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Public Shillong Properties
+    match /properties/{propertyId} {
+      allow read: if true;
+      allow create: if isSignedIn() 
+                    && incoming().ownerId == request.auth.uid
+                    && incoming().title is string && incoming().title.size() <= 200
+                    && incoming().price is number && incoming().price > 0
+                    && incoming().locality is string
+                    && incoming().type in ['rent', 'sale'];
+      allow update: if (isSignedIn() && existing().ownerId == request.auth.uid && incoming().ownerId == existing().ownerId)
+                    || (incoming().diff(existing()).affectedKeys().hasOnly(['viewsCount', 'inquiriesCount']));
+      allow delete: if isSignedIn() && existing().ownerId == request.auth.uid;
+    }
+
+    // Real-Time Property Chats (Between Tenants and Owners)
+    match /chats/{chatId} {
+      allow get: if isSignedIn() && (resource.data.tenantId == request.auth.uid || resource.data.ownerId == request.auth.uid);
+      allow list: if isSignedIn();
+      allow create: if isSignedIn()
+                    && (incoming().tenantId == request.auth.uid || incoming().ownerId == request.auth.uid)
+                    && incoming().propertyId is string
+                    && incoming().tenantId is string
+                    && incoming().ownerId is string;
+      allow update: if isSignedIn() 
+                    && (existing().tenantId == request.auth.uid || existing().ownerId == request.auth.uid)
+                    && incoming().tenantId == existing().tenantId
+                    && incoming().ownerId == existing().ownerId
+                    && incoming().propertyId == existing().propertyId;
+      allow delete: if isSignedIn() && (existing().tenantId == request.auth.uid || existing().ownerId == request.auth.uid);
+
+      // Chat Messages Subcollection
+      match /messages/{messageId} {
+        allow read: if isSignedIn() 
+                    && (get(/databases/$(database)/documents/chats/$(chatId)).data.tenantId == request.auth.uid 
+                        || get(/databases/$(database)/documents/chats/$(chatId)).data.ownerId == request.auth.uid);
+        allow create: if isSignedIn()
+                      && (get(/databases/$(database)/documents/chats/$(chatId)).data.tenantId == request.auth.uid 
+                          || get(/databases/$(database)/documents/chats/$(chatId)).data.ownerId == request.auth.uid)
+                      && incoming().senderId == request.auth.uid
+                      && incoming().text is string && incoming().text.size() <= 2000;
+        allow update, delete: if false;
+      }
+    }
+  }
+}

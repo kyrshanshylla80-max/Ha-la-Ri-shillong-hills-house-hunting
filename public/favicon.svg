@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#7A9E7E"/>
+  <rect x="24" y="24" width="464" height="464" rx="92" fill="#FFFFFF"/>
+  
+  <!-- Rolling Hills -->
+  <path d="M 60 320 C 140 260, 220 280, 280 310 C 350 270, 420 280, 452 320 L 452 410 C 452 440, 420 452, 380 452 L 132 452 C 80 452, 60 440, 60 410 Z" fill="#9FC1A3"/>
+  <path d="M 60 350 C 120 310, 200 320, 270 345 C 340 315, 410 325, 452 355 L 452 420 C 452 444, 420 452, 380 452 L 132 452 C 80 452, 60 444, 60 420 Z" fill="#588157"/>
+  <path d="M 60 380 C 140 340, 240 365, 330 360 C 390 355, 430 370, 452 385 L 452 420 C 452 444, 420 452, 380 452 L 132 452 C 80 452, 60 444, 60 420 Z" fill="#3A5A40"/>
+
+  <!-- Left Pine Trees -->
+  <path d="M 110 300 L 98 322 L 104 322 L 92 344 L 102 344 L 88 368 L 132 368 L 118 344 L 128 344 L 116 322 L 122 322 Z" fill="#2D4A34"/>
+  <path d="M 140 310 L 130 328 L 135 328 L 125 346 L 133 346 L 122 366 L 158 366 L 147 346 L 155 346 L 145 328 L 150 328 Z" fill="#2D4A34"/>
+
+  <!-- Right Pine Trees -->
+  <path d="M 375 310 L 365 328 L 370 328 L 360 346 L 368 346 L 357 366 L 393 366 L 382 346 L 390 346 L 380 328 L 385 328 Z" fill="#2D4A34"/>
+  <path d="M 405 300 L 393 322 L 399 322 L 387 344 L 397 344 L 383 368 L 427 368 L 413 344 L 423 344 L 411 322 L 417 322 Z" fill="#2D4A34"/>
+
+  <!-- Cottage Body -->
+  <polygon points="256,200 176,275 190,275 190,390 322,390 322,275 336,275" fill="#FFFFFF" stroke="#3A5A40" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Cottage Roof -->
+  <polygon points="256,188 152,280 172,280 256,206 340,280 360,280" fill="#588157"/>
+
+  <!-- Wordmark "ha" -->
+  <text x="256" y="260" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="28" font-weight="700" fill="#588157" text-anchor="middle">ha</text>
+
+  <!-- Door & Windows -->
+  <rect x="238" y="330" width="36" height="60" rx="18" fill="#3A5A40"/>
+  <rect x="290" y="315" width="16" height="32" rx="4" fill="#588157"/>
+  <rect x="312" y="315" width="16" height="32" rx="4" fill="#588157"/>
+</svg>

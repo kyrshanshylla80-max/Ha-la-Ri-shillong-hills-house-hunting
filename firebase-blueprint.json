@@ -1,0 +1,119 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Registered user profile with role and contact information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "format": "email", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "enum": ["tenant", "owner", "rent_owner"] },
+        "phone": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Property": {
+      "title": "Property Listing",
+      "description": "Real estate property listed in Shillong hills",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "khasiTitle": { "type": "string", "maxLength": 200 },
+        "address": { "type": "string", "maxLength": 300 },
+        "locality": { "type": "string", "maxLength": 100 },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "elevation": { "type": "string", "maxLength": 50 },
+        "price": { "type": "number" },
+        "type": { "type": "string", "enum": ["rent", "sale"] },
+        "bhk": { "type": "number" },
+        "bathrooms": { "type": "number" },
+        "sqft": { "type": "number" },
+        "images": { "type": "array" },
+        "ownerId": { "type": "string", "maxLength": 128 },
+        "ownerName": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "whatsapp": { "type": "string", "maxLength": 30 },
+        "isVerified": { "type": "boolean" },
+        "waterSupply": { "type": "string", "maxLength": 200 },
+        "parking": { "type": "string", "maxLength": 200 },
+        "roadAccess": { "type": "string", "maxLength": 200 },
+        "furnishing": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "locality", "price", "type", "ownerId", "ownerName", "phone"]
+    },
+    "SavedProperty": {
+      "title": "Saved Property",
+      "description": "User bookmarked property for offline hill access",
+      "type": "object",
+      "properties": {
+        "propertyId": { "type": "string", "maxLength": 128 },
+        "savedAt": { "type": "string" }
+      },
+      "required": ["propertyId", "savedAt"]
+    },
+    "Chat": {
+      "title": "Chat Conversation",
+      "description": "Real-time conversation between a tenant and property owner for a specific property",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "propertyId": { "type": "string", "maxLength": 128 },
+        "propertyTitle": { "type": "string", "maxLength": 200 },
+        "propertyLocality": { "type": "string", "maxLength": 100 },
+        "propertyPrice": { "type": "number" },
+        "propertyImage": { "type": "string" },
+        "tenantId": { "type": "string", "maxLength": 128 },
+        "tenantName": { "type": "string", "maxLength": 100 },
+        "ownerId": { "type": "string", "maxLength": 128 },
+        "ownerName": { "type": "string", "maxLength": 100 },
+        "lastMessage": { "type": "string", "maxLength": 1000 },
+        "lastMessageAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["propertyId", "tenantId", "ownerId"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "Individual message in a property chat thread",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "chatId": { "type": "string", "maxLength": 128 },
+        "senderId": { "type": "string", "maxLength": 128 },
+        "senderName": { "type": "string", "maxLength": 100 },
+        "text": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["chatId", "senderId", "text"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profile document owned by the authenticated user"
+    },
+    "/users/{userId}/saved/{propertyId}": {
+      "schema": { "$ref": "#/entities/SavedProperty" },
+      "description": "Bookmarked properties saved by this user"
+    },
+    "/properties/{propertyId}": {
+      "schema": { "$ref": "#/entities/Property" },
+      "description": "Public real estate listings in Shillong"
+    },
+    "/chats/{chatId}": {
+      "schema": { "$ref": "#/entities/Chat" },
+      "description": "Direct chat conversation between tenant and owner linked to propertyId"
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Individual messages in a property chat thread"
+    }
+  }
+}
